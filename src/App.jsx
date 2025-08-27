@@ -188,7 +188,6 @@ function App() {
 
       </header>
 
-      <p>{searchValue}</p>
 
       <div className='user-list'>
         {displayedData?.slice(0, 20).map((person, index) => (

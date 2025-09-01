@@ -10,7 +10,7 @@
     background-color: #F9FAFB;
 }
 
-.header img{
+.header img {
     display: block;
     margin: 0 auto;
     width: 300px;
@@ -26,6 +26,11 @@ hr {
     justify-content: space-between;
 }
 
+.search-container {
+    position: relative;
+    height: max-content;
+}
+
 .header h1 {
     text-align: center;
     color: #003c6dc2;
@@ -39,12 +44,6 @@ hr {
     font-size: 18px;
 }
 
-.search-container {
-    position: relative;
-    height: max-content;
-}
-
-.filter-container {}
 
 .filter-container button {
     background-color: #333;
@@ -52,7 +51,7 @@ hr {
     box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.156);
     border-radius: 4px;
     border: none;
-    padding: 4px 12px ;
+    padding: 4px 12px;
     font-size: 16px;
     cursor: pointer;
 }
@@ -110,8 +109,8 @@ select {
 }
 
 .pagination button {
-    padding: 16px;
-    font-size: 20px;
+    padding: 8px;
+    font-size: 16px;
     margin: 1px 4px;
     box-shadow: 0px 0px 1px 2px rgba(0, 0, 0, 0.1);
     border: none;
@@ -129,6 +128,7 @@ select {
     background-color: #333;
 }
 
+/* 
 .pagination input {
     font-size: 16px;
     margin: 0 12px;
@@ -137,4 +137,56 @@ select {
     text-align: center;
     border: 1px solid #ccc;
     border-radius: 4px;
+} */
+
+.pagination input {
+    font-size: 16px;
+    margin: 0 12px;
+    width: 50px;
+    padding: 6px 10px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    outline: none;
+    appearance: textfield;
+    /* Removes number input styles */
+    -moz-appearance: textfield;
+    /* Firefox */
+}
+
+.pagination input::-webkit-outer-spin-button,
+.pagination input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.pagination input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 4px rgba(0, 123, 255, 0.4);
+}
+
+@media screen and (max-width: 850px) {
+    .filters {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+
+    .search-container {
+        position: absolute;
+        height: max-content;
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #888;
+        pointer-events: none;
+    }
+
+    .filter-container {
+        margin: 4rem 0;
+    }
 }

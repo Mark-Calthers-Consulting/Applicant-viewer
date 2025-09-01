@@ -9,6 +9,7 @@ import logo from './assets/logo.png'
 
 function App() {
   const [searchValue, setSearchValue] = useState('')
+  const [originalData, setOriginalData] = useState([]);
   const [data, setData] = useState([])
   const [filteredData, setFilteredData] = useState([])
   const [selectedUser, setSelectedUser] = useState()
@@ -18,6 +19,7 @@ function App() {
     position: '',
     gender: '',
   })
+
   const numberperpage = 20
 
   const numberOfPages = Math.ceil(filteredData.length / numberperpage)
@@ -36,6 +38,7 @@ function App() {
       skipEmptyLines: true,
     });
     console.log(parsed.data)
+    setOriginalData(parsed.data)
     setData(parsed.data)
     setFilteredData(parsed.data)
   }
@@ -48,7 +51,7 @@ function App() {
       setFilteredData(data)
       return
     }
-    const filtered = data.filter((person) => {
+    const filtered = filteredData.filter((person) => {
       const name = (person.Surname + ' ' + person['Other Names']).toLowerCase()
       console.log(name)
       return name.toLowerCase().includes(value)
@@ -69,40 +72,71 @@ function App() {
   }
 
   const filterData = (updatedFilters) => {
+    setFilteredData(originalData)
+    let result = [...originalData]
 
-    let filterString = ''
-    let filterArr = []
-    console.log(updatedFilters)
-
-    Object.keys(updatedFilters).forEach(key => {
-      filterArr.push({ [key]: updatedFilters[key] })
-    });
-
-    console.log(filterArr)
-
-    for (const filter of filterArr) {
-      console.log(filter)
-      console.log(Object.values(filter))
-      // console.log(Object.keys(updatedFilters), Object.values(updatedFilters))
-
-      if (Object.values(filter)[0] === '') {
-        filterString = filterString
-      } else {
-        if (filterString == '') {
-          // filterString = Object.values(filter)[0]
-          filterString = `${Object.keys(filter)} == ${Object.values(filter)[0]}`
-        } else {
-          filterString = `${filterString} && ${Object.keys(filter)} == ${Object.values(filter)[0]}`
-        }
-      }
+    if (searchValue.trim()) {
+      result = result.filter((person) => {
+        const name = (person.Surname + ' ' + person['Other Names']).toLowerCase()
+        console.log(name)
+        return name.toLowerCase().includes(searchValue)
+      })
+      // setFilteredData(searchFiltered)
     }
 
-    console.log(filterString)
 
-    filteredData.filter((person) => {
+    result = result.filter(app =>
+      (!updatedFilters.gender || app['Gender'] === updatedFilters.gender) &&
+      (!updatedFilters.position || app['Position Applying for'] === updatedFilters.position)
+    );
 
-    })
-  }
+    setFilteredData(result);
+  };
+
+
+  // const filterData = (updatedFilters) => {
+  //   let filterString = ''
+  //   let filterArr = []
+  //   console.log(updatedFilters)
+
+  //   Object.keys(updatedFilters).forEach(key => {
+  //     filterArr.push({ [key]: updatedFilters[key] })
+  //   });
+
+  //   console.log(filterArr)
+
+  //   for (const filter of filterArr) {
+  //     // console.log(filter)
+  //     // console.log(Object.values(filter))
+  //     // console.log(Object.keys(updatedFilters), Object.values(updatedFilters))
+
+  //     if (Object.values(filter)[0] === '') {
+  //       filterString = filterString
+  //     } else {
+  //       if (filterString == '') {
+  //         // filterString = Object.values(filter)[0]
+  //         filterString = `${Object.keys(filter)} == ${Object.values(filter)[0]}`
+  //       } else {
+  //         filterString = `${filterString} && ${Object.keys(filter)} == ${Object.values(filter)[0]}`
+  //       }
+  //     }
+  //   }
+
+  //   console.log(filterArr)
+
+  //   console.log(filterString)
+
+  //   const filtered = filteredData.filter(app =>
+  //     // app['Gender'] == filters.gender &&
+  //     app['Gender'] == updatedFilters.gender &&
+  //     // app['Position Applying for'] == "HR & Office Admin Lagos (MCC)"
+  //     app['Position Applying for'] == "HR & Office Admin Lagos (MCC)"
+  //   );
+
+
+  //   setData(filtered)
+
+  // }
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target
@@ -115,18 +149,6 @@ function App() {
       return updated;
     }
     )
-
-
-    // const filtering
-
-    // Object.keys(filters).forEach(key => {
-    //   console.log("Key:", key);
-    //   console.log("Value:", filters[key]);
-    // });
-
-
-    // console.log(filtering)
-    // setFilteredData()
   }
 
   const clearFilters = () => {
@@ -134,6 +156,8 @@ function App() {
       gender: '',
       position: ''
     })
+
+    setFilteredData(originalData)
   }
 
 
@@ -178,8 +202,8 @@ function App() {
             <div className="">
               <select name="gender" id="gender" value={filters.gender} onChange={handleFilterChange}>
                 <option value="">Any gender</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
               </select>
             </div>
             <button onClick={clearFilters}>Clear filters</button>

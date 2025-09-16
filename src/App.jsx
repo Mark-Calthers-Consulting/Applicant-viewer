@@ -197,6 +197,7 @@ function App() {
                 <option value="Customer Experience Officer (MCC)">Customer Experience Officer (MCC)</option>
                 <option value="HR & Office Admin Abuja (MCC)">HR & Office Admin Abuja (MCC)</option>
                 <option value="Sales Supervisor (NB)">Sales Supervisor (NB)</option>
+                <option value="Learning and Development Coordinator (MCC)">Learning and Development Coordinator (MCC)</option>
               </select>
             </div>
             <div className="">

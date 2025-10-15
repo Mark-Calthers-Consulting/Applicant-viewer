@@ -198,6 +198,17 @@ function App() {
                 <option value="HR & Office Admin Abuja (MCC)">HR & Office Admin Abuja (MCC)</option>
                 <option value="Sales Supervisor (NB)">Sales Supervisor (NB)</option>
                 <option value="Learning and Development Coordinator (MCC)">Learning and Development Coordinator (MCC)</option>
+
+                <option value="Sales Partner(Wema Bank)">Sales Partner(Wema Bank)</option>
+                <option value="Tele-Sales Supervisor (NB)">Tele-Sales Supervisor (NB)</option>
+                <option value="Social Media & Content Executive">Social Media & Content Executive</option>
+                <option value="IT Support Officer">IT Support Officer</option>
+
+                <option value=">Graduate Trainees">Graduate Trainees</option>
+                <option value="Office Assistants">Office Assistants</option>
+                <option value="Business Development Executive (MCC)">Business Development Executive (MCC)</option>
+                <option value="Motorised Sales Representative">Motorised Sales Representative</option>
+
               </select>
             </div>
             <div className="">

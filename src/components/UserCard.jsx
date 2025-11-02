@@ -19,6 +19,13 @@ const UserCard = ({ userData }) => {
                 <h3>{userData?.Gender}  </h3>
             </div>
 
+<div className="">
+    <p>Date Applied - <span>{new Date(userData.Timestamp).toLocaleString('en-US', {
+                                    day: 'numeric',
+                                    month: 'long',
+                                    year: 'numeric',
+                                })}</span></p>
+</div>
             <button>View Details</button>
         </div>
     )

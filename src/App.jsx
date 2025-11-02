@@ -7,6 +7,21 @@ import Pagination from './components/Pagination';
 import { Apple, Search } from 'lucide-react';
 import logo from './assets/logo.png'
 
+const getAgeFromDOB = (dobString) => {
+  const dob = new Date(dobString);
+  if (isNaN(dob)) return null;
+
+  const today = new Date();
+  let age = today.getFullYear() - dob.getFullYear();
+  const m = today.getMonth() - dob.getMonth();
+
+  if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+    age--;
+  }
+
+  return age;
+};
+
 function App() {
   const [searchValue, setSearchValue] = useState('')
   const [originalData, setOriginalData] = useState([]);
@@ -18,6 +33,8 @@ function App() {
   const [filters, setFilters] = useState({
     position: '',
     gender: '',
+    age: '',
+    maritalStatus: '',
   })
 
   const numberperpage = 20
@@ -71,6 +88,8 @@ function App() {
     console.log(page)
   }
 
+
+
   const filterData = (updatedFilters) => {
     setFilteredData(originalData)
     let result = [...originalData]
@@ -87,56 +106,14 @@ function App() {
 
     result = result.filter(app =>
       (!updatedFilters.gender || app['Gender'] === updatedFilters.gender) &&
-      (!updatedFilters.position || app['Position Applying for'] === updatedFilters.position)
+      (!updatedFilters.position || app['Position Applying for'] === updatedFilters.position) &&
+      (!updatedFilters.age || getAgeFromDOB(app['Date of Birth']) === parseInt(updatedFilters.age)) &&
+      (!updatedFilters.maritalStatus || app['Marital Status'] === updatedFilters.maritalStatus)
     );
 
     setFilteredData(result);
   };
 
-
-  // const filterData = (updatedFilters) => {
-  //   let filterString = ''
-  //   let filterArr = []
-  //   console.log(updatedFilters)
-
-  //   Object.keys(updatedFilters).forEach(key => {
-  //     filterArr.push({ [key]: updatedFilters[key] })
-  //   });
-
-  //   console.log(filterArr)
-
-  //   for (const filter of filterArr) {
-  //     // console.log(filter)
-  //     // console.log(Object.values(filter))
-  //     // console.log(Object.keys(updatedFilters), Object.values(updatedFilters))
-
-  //     if (Object.values(filter)[0] === '') {
-  //       filterString = filterString
-  //     } else {
-  //       if (filterString == '') {
-  //         // filterString = Object.values(filter)[0]
-  //         filterString = `${Object.keys(filter)} == ${Object.values(filter)[0]}`
-  //       } else {
-  //         filterString = `${filterString} && ${Object.keys(filter)} == ${Object.values(filter)[0]}`
-  //       }
-  //     }
-  //   }
-
-  //   console.log(filterArr)
-
-  //   console.log(filterString)
-
-  //   const filtered = filteredData.filter(app =>
-  //     // app['Gender'] == filters.gender &&
-  //     app['Gender'] == updatedFilters.gender &&
-  //     // app['Position Applying for'] == "HR & Office Admin Lagos (MCC)"
-  //     app['Position Applying for'] == "HR & Office Admin Lagos (MCC)"
-  //   );
-
-
-  //   setData(filtered)
-
-  // }
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target
@@ -154,11 +131,15 @@ function App() {
   const clearFilters = () => {
     setFilters({
       gender: '',
-      position: ''
-    })
+      position: '',
+      age: '',
+      maritalStatus: '',
+    });
 
-    setFilteredData(originalData)
+    setFilteredData(originalData);
   }
+
+
 
 
   useEffect(() => {
@@ -218,6 +199,27 @@ function App() {
                 <option value="Female">Female</option>
               </select>
             </div>
+            <div>
+              <select name="age" value={filters.age} onChange={handleFilterChange}>
+                <option value="">Any age</option>
+                {Array.from({ length: 60 - 18 + 1 }, (_, i) => i + 18).map((age) => (
+                  <option key={age} value={age}>{age}</option>
+                ))}
+              </select>
+            </div>
+
+
+            <div>
+              <select name="maritalStatus" value={filters.maritalStatus} onChange={handleFilterChange}>
+                <option value="">Any marital status</option>
+                {Array.from(new Set(originalData.map(item => item['Marital Status'])))
+                  .filter(Boolean)
+                  .map((status, index) => (
+                    <option key={index} value={status}>{status}</option>
+                  ))}
+              </select>
+            </div>
+
             <button onClick={clearFilters}>Clear filters</button>
           </div>
         </div>

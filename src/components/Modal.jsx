@@ -39,8 +39,19 @@ const Modal = ({ isOpen, onClose, modalData }) => {
                         <h5>Applicant Name</h5>
                         <h2>{modalData.Surname} {modalData['Other Names']}</h2>
                     </div>
-
                     <div className={modalStyles.modalBody}>
+                        {modalData.Timestamp && (
+                            <section>
+                                <h4><strong>Date applied :</strong> {new Date(modalData.Timestamp).toLocaleString('en-US', {
+                                    day: 'numeric',
+                                    month: 'long',
+                                    year: 'numeric',
+                                    hour: 'numeric',
+                                    minute: '2-digit',
+                                    hour12: true
+                                })}</h4>
+                            </section>
+                        )}
                         {/* PERSONAL INFO */}
                         <section>
                             <h4><User size={16} /> Personal Info</h4>

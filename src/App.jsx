@@ -68,10 +68,9 @@ function App() {
       setFilteredData(data)
       return
     }
-    const filtered = filteredData.filter((person) => {
+    const filtered = data.filter((person) => {
       const name = (person.Surname + ' ' + person['Other Names']).toLowerCase()
-      console.log(name)
-      return name.toLowerCase().includes(value)
+      return name.includes(value.toLowerCase())
     })
 
     setFilteredData(filtered)

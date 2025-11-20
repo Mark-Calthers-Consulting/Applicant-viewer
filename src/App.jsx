@@ -33,7 +33,7 @@ function App() {
   const [filters, setFilters] = useState({
     position: '',
     gender: '',
-    age: '',
+    ageRange: '',
     maritalStatus: '',
   })
 
@@ -43,7 +43,7 @@ function App() {
   // console.log(numberOfPages)
 
 
-  const displayedData = filteredData?.slice(((page - 1) * 20), (page * 20) + 1)
+  const displayedData = filteredData?.slice(((page - 1) * numberperpage), (page * numberperpage))
 
   const fetchData = async () => {
     const response = await fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vQwLT2IUc8vWOrBFQmepClyimstsFQwT1oiCH8xTHbrSNi3-_4uKTYySEmbiPp6UW2-QD4HKtuvRTqq/pub?output=csv')
@@ -104,12 +104,25 @@ function App() {
     }
 
 
-    result = result.filter(app =>
-      (!updatedFilters.gender || app['Gender'] === updatedFilters.gender) &&
-      (!updatedFilters.position || app['Position Applying for'] === updatedFilters.position) &&
-      (!updatedFilters.age || getAgeFromDOB(app['Date of Birth']) === parseInt(updatedFilters.age)) &&
-      (!updatedFilters.maritalStatus || app['Marital Status'] === updatedFilters.maritalStatus)
-    );
+    result = result.filter(app => {
+      const age = getAgeFromDOB(app['Date of Birth']);
+      let ageMatch = true;
+
+      if (updatedFilters.ageRange) {
+        if (updatedFilters.ageRange === '18-24') ageMatch = age >= 18 && age <= 24;
+        else if (updatedFilters.ageRange === '25-34') ageMatch = age >= 25 && age <= 34;
+        else if (updatedFilters.ageRange === '35-44') ageMatch = age >= 35 && age <= 44;
+        else if (updatedFilters.ageRange === '45-54') ageMatch = age >= 45 && age <= 54;
+        else if (updatedFilters.ageRange === '55+') ageMatch = age >= 55;
+      }
+
+      return (
+        (!updatedFilters.gender || app['Gender'] === updatedFilters.gender) &&
+        (!updatedFilters.position || app['Position Applying for'] === updatedFilters.position) &&
+        ageMatch &&
+        (!updatedFilters.maritalStatus || app['Marital Status'] === updatedFilters.maritalStatus)
+      );
+    });
 
     setFilteredData(result);
   };
@@ -132,7 +145,7 @@ function App() {
     setFilters({
       gender: '',
       position: '',
-      age: '',
+      ageRange: '',
       maritalStatus: '',
     });
 
@@ -150,7 +163,7 @@ function App() {
     <>
       <header className='header'>
         <img src={logo} alt="" />
-        <h1 className=''>MCC Candidates Directory</h1>
+        <h1 className=''>MCC Talent Directory</h1>
         <p>Discover talented professionals from the applicant pool</p>
         <hr />
         <div className="filters">
@@ -200,11 +213,13 @@ function App() {
               </select>
             </div>
             <div>
-              <select name="age" value={filters.age} onChange={handleFilterChange}>
+              <select name="ageRange" value={filters.ageRange} onChange={handleFilterChange}>
                 <option value="">Any age</option>
-                {Array.from({ length: 60 - 18 + 1 }, (_, i) => i + 18).map((age) => (
-                  <option key={age} value={age}>{age}</option>
-                ))}
+                <option value="18-24">18-24 years</option>
+                <option value="25-34">25-34 years</option>
+                <option value="35-44">35-44 years</option>
+                <option value="45-54">45-54 years</option>
+                <option value="55+">55+ years</option>
               </select>
             </div>
 

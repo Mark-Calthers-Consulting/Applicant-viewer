@@ -1,32 +1,49 @@
 import cardStyles from './UserCard.module.css'
-const UserCard = ({ userData }) => {
-    // console.log(userData)
+import { User, Briefcase, Calendar } from 'lucide-react';
 
+const UserCard = ({ userData }) => {
     return (
         <div className={cardStyles.card}>
-            <div>
-                <h6>Candidate</h6>
-                <h2>{userData?.Surname} {userData['Other Names']}</h2>
+            <div className={cardStyles.header}>
+                <div className={cardStyles.avatar}>
+                    <User size={28} />
+                </div>
+                <div className={cardStyles.nameSection}>
+                    <span className={cardStyles.label}>Candidate</span>
+                    <h2 className={cardStyles.name}>{userData?.Surname} {userData['Other Names']}</h2>
+                </div>
             </div>
 
-            <div className="">
-                <h6>Position applied </h6>
-                <h3>{userData['Position Applying for']}</h3>
+            <div className={cardStyles.content}>
+                <div className={cardStyles.infoRow}>
+                    <div className={cardStyles.iconWrapper}>
+                        <Briefcase size={18} />
+                    </div>
+                    <div className={cardStyles.infoContent}>
+                        <span className={cardStyles.infoLabel}>Position</span>
+                        <p className={cardStyles.infoValue}>{userData['Position Applying for']}</p>
+                    </div>
+                </div>
+
+                <div className={cardStyles.metaRow}>
+                    <div className={cardStyles.metaItem}>
+                        <span className={cardStyles.metaLabel}>Gender</span>
+                        <span className={cardStyles.metaValue}>{userData?.Gender}</span>
+                    </div>
+                    <div className={cardStyles.metaItem}>
+                        <Calendar size={14} />
+                        <span className={cardStyles.dateText}>
+                            {new Date(userData.Timestamp).toLocaleString('en-US', {
+                                day: 'numeric',
+                                month: 'short',
+                                year: 'numeric',
+                            })}
+                        </span>
+                    </div>
+                </div>
             </div>
 
-            <div className="">
-                <h6>Gender</h6>
-                <h3>{userData?.Gender}  </h3>
-            </div>
-
-<div className="">
-    <p>Date Applied - <span>{new Date(userData.Timestamp).toLocaleString('en-US', {
-                                    day: 'numeric',
-                                    month: 'long',
-                                    year: 'numeric',
-                                })}</span></p>
-</div>
-            <button>View Details</button>
+            <button className={cardStyles.viewButton}>View Details</button>
         </div>
     )
 }

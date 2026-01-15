@@ -37,7 +37,7 @@ function App() {
     maritalStatus: '',
     highestQualification: '',
     yearCompletedNYSC: '',
-    postNYSCYears:'',
+    postNYSCYears: '',
   })
 
   const numberperpage = 20
@@ -125,8 +125,15 @@ function App() {
           (app['Highest Educational Qualification'] &&
             updatedFilters.highestQualification.toLowerCase().includes(app['Highest Educational Qualification'].toLowerCase()))
         ) &&
-        (!updatedFilters.yearCompletedNYSC || app['Year Completed NYSC'] == updatedFilters.yearCompletedNYSC)&&
-        (!updatedFilters.postNYSCYears|| app['How many years post NYSC experience do you have?'] == updatedFilters.postNYSCYears)
+        (!updatedFilters.yearCompletedNYSC || app['Year Completed NYSC'] == updatedFilters.yearCompletedNYSC) &&
+        // (!updatedFilters.postNYSCYears || app['How many years post NYSC experience do you have?'] == updatedFilters.postNYSCYears)
+        (!updatedFilters.postNYSCYears ||
+          app['How many years post NYSC experience do you have?'] === updatedFilters.postNYSCYears ||
+          (
+            updatedFilters.postNYSCYears === '10 to 15 years' &&
+            app['How many years post NYSC experience do you have?'] === 'More than 10 years'
+          )
+        )
       );
     });
 
@@ -155,9 +162,9 @@ function App() {
       ageRange: '',
       maritalStatus: '',
       highestQualification: '',
-      yearCompletedNYSC,
-      postNYSCYears,
-      
+      yearCompletedNYSC: '',
+      postNYSCYears: '',
+      yearCompletedNYSC: ''
     });
 
     setFilteredData(originalData);
@@ -264,7 +271,7 @@ function App() {
             </div>
 
             <div>
-              <select name="postNYSCYears" value={filters.highestQualification} onChange={handleFilterChange}>
+              <select name="postNYSCYears" value={filters.postNYSCYears} onChange={handleFilterChange}>
                 <option value="">Post NYSC Years Experience</option>
                 <option value="1 to 2 years">1 to 2 years</option>
                 <option value="3 to 5 years">3 to 5 years</option>

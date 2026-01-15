@@ -36,13 +36,13 @@ function App() {
     ageRange: '',
     maritalStatus: '',
     highestQualification: '',
+    yearCompletedNYSC: '',
+    postNYSCYears:'',
   })
 
   const numberperpage = 20
 
   const numberOfPages = Math.ceil(filteredData.length / numberperpage)
-  // console.log(numberOfPages)
-
 
   const displayedData = filteredData?.slice(((page - 1) * numberperpage), (page * numberperpage))
 
@@ -65,17 +65,18 @@ function App() {
   const handleSearch = (value) => {
     setPage(1)
     setSearchValue(value)
-    if (!value.trim()) {
-      setFilteredData(data)
-      return
-    }
+    filterData(filters, value)
+    // if (!value.trim()) {
+    //   setFilteredData(data)
+    //   return
+    // }
 
-    const filtered = data.filter((person) => {
-      const name = (person.Surname + ' ' + person['Other Names']).toLowerCase()
-      return name.includes(value.toLowerCase())
-    })
+    // const filtered = data.filter((person) => {
+    //   const name = (person.Surname + ' ' + person['Other Names']).toLowerCase()
+    //   return name.includes(value.toLowerCase())
+    // })
 
-    setFilteredData(filtered)
+    // setFilteredData(filtered)
   }
 
   const handleCardClick = (data) => {
@@ -91,17 +92,15 @@ function App() {
 
 
 
-  const filterData = (updatedFilters) => {
+  const filterData = (updatedFilters, currentSearch = searchValue) => {
     setFilteredData(originalData)
     let result = [...originalData]
 
-    if (searchValue.trim()) {
+    if (currentSearch && currentSearch.trim()) {
       result = result.filter((person) => {
         const name = (person.Surname + ' ' + person['Other Names']).toLowerCase()
-        console.log(name)
-        return name.toLowerCase().includes(searchValue)
+        return name.includes(currentSearch.toLowerCase())
       })
-      // setFilteredData(searchFiltered)
     }
 
 
@@ -122,13 +121,17 @@ function App() {
         (!updatedFilters.position || app['Position Applying for'] === updatedFilters.position) &&
         ageMatch &&
         (!updatedFilters.maritalStatus || app['Marital Status'] === updatedFilters.maritalStatus) &&
-        (!updatedFilters.highestQualification || app['Highest Educational Qualification'] == updatedFilters.highestQualification)
+        (!updatedFilters.highestQualification ||
+          (app['Highest Educational Qualification'] &&
+            updatedFilters.highestQualification.toLowerCase().includes(app['Highest Educational Qualification'].toLowerCase()))
+        ) &&
+        (!updatedFilters.yearCompletedNYSC || app['Year Completed NYSC'] == updatedFilters.yearCompletedNYSC)&&
+        (!updatedFilters.postNYSCYears|| app['How many years post NYSC experience do you have?'] == updatedFilters.postNYSCYears)
       );
     });
 
     setFilteredData(result);
   };
-
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target
@@ -137,19 +140,24 @@ function App() {
     setFilters((prev) => {
       updated = { ...prev, [name]: value };
       // console.log("Updating filters to:", updated);
-      filterData(updated)
+      filterData(updated, searchValue)
       return updated;
     }
     )
   }
 
   const clearFilters = () => {
+    setSearchValue('');
+
     setFilters({
       gender: '',
       position: '',
       ageRange: '',
       maritalStatus: '',
       highestQualification: '',
+      yearCompletedNYSC,
+      postNYSCYears,
+      
     });
 
     setFilteredData(originalData);
@@ -175,6 +183,7 @@ function App() {
             <input
               type="text"
               placeholder="Search for a candidate"
+              value={searchValue}
               className="search-input"
               onChange={(e) => handleSearch(e.target.value)}
             />
@@ -201,7 +210,7 @@ function App() {
                 <option value="Social Media & Content Executive">Social Media & Content Executive</option>
                 <option value="IT Support Officer">IT Support Officer</option>
 
-                <option value=">Graduate Trainees">Graduate Trainees</option>
+                <option value="Graduate Trainees">Graduate Trainees</option>
                 <option value="Office Assistants">Office Assistants</option>
                 <option value="Business Development Executive (MCC)">Business Development Executive (MCC)</option>
                 <option value="Motorised Sales Representative">Motorised Sales Representative</option>
@@ -252,6 +261,22 @@ function App() {
                 <option value="MSc., MBA, LLM">MSc., MBA, LLM</option>
                 <option value="PHD">PHD</option>
               </select>
+            </div>
+
+            <div>
+              <select name="postNYSCYears" value={filters.highestQualification} onChange={handleFilterChange}>
+                <option value="">Post NYSC Years Experience</option>
+                <option value="1 to 2 years">1 to 2 years</option>
+                <option value="3 to 5 years">3 to 5 years</option>
+                <option value="5 to 10 years">5 to 10 years</option>
+                <option value="10 to 15 years">10 to 15 years</option>
+                <option value="More than 15 years">More than 15 years</option>
+                <option value="More than 20 years">More than 20 years</option>
+              </select>
+            </div>
+
+            <div >
+              <input className="search-input" type="number" placeholder="NYSC Completion year if applicable" value={filters.yearCompletedNYSC} onChange={handleFilterChange} name="yearCompletedNYSC" id="" />
             </div>
 
             <button onClick={clearFilters}>Clear filters</button>

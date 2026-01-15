@@ -88,7 +88,7 @@ const Modal = ({ isOpen, onClose, modalData }) => {
                         {/* EDUCATION & CERTIFICATIONS */}
                         <section>
                             <h4><GraduationCap size={16} /> Education & Certifications</h4>
-                            <p><strong>Highest Qualification:</strong> {modalData['  Highest Educational Qualification  ']}</p>
+                            <p><strong>Highest Qualification:</strong> {modalData['Highest Educational Qualification']}</p>
                             <p><strong>NYSC Status:</strong> {modalData['NYSC Certification Status']}</p>
                             <p><strong>Post-NYSC Experience (years):</strong> {modalData['How many years post NYSC experience do you have?']}</p>
                             {modalData['If you have any other certifications or qualifications, please specify'] && (

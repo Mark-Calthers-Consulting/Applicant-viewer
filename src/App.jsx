@@ -35,6 +35,7 @@ function App() {
     gender: '',
     ageRange: '',
     maritalStatus: '',
+    highestQualification: '',
   })
 
   const numberperpage = 20
@@ -68,6 +69,7 @@ function App() {
       setFilteredData(data)
       return
     }
+
     const filtered = data.filter((person) => {
       const name = (person.Surname + ' ' + person['Other Names']).toLowerCase()
       return name.includes(value.toLowerCase())
@@ -119,7 +121,8 @@ function App() {
         (!updatedFilters.gender || app['Gender'] === updatedFilters.gender) &&
         (!updatedFilters.position || app['Position Applying for'] === updatedFilters.position) &&
         ageMatch &&
-        (!updatedFilters.maritalStatus || app['Marital Status'] === updatedFilters.maritalStatus)
+        (!updatedFilters.maritalStatus || app['Marital Status'] === updatedFilters.maritalStatus) &&
+        (!updatedFilters.highestQualification || app['Highest Educational Qualification'] == updatedFilters.highestQualification)
       );
     });
 
@@ -146,6 +149,7 @@ function App() {
       position: '',
       ageRange: '',
       maritalStatus: '',
+      highestQualification: '',
     });
 
     setFilteredData(originalData);
@@ -204,6 +208,7 @@ function App() {
 
               </select>
             </div>
+
             <div className="">
               <select name="gender" id="gender" value={filters.gender} onChange={handleFilterChange}>
                 <option value="">Any gender</option>
@@ -211,6 +216,7 @@ function App() {
                 <option value="Female">Female</option>
               </select>
             </div>
+
             <div>
               <select name="ageRange" value={filters.ageRange} onChange={handleFilterChange}>
                 <option value="">Any age</option>
@@ -221,6 +227,8 @@ function App() {
                 <option value="55+">55+ years</option>
               </select>
             </div>
+
+
 
 
             <div>
@@ -234,6 +242,18 @@ function App() {
               </select>
             </div>
 
+            <div>
+              <select name="highestQualification" value={filters.highestQualification} onChange={handleFilterChange}>
+                <option value="">Any Qualification</option>
+                <option value="SSCE, First School Leaving Certificate">SSCE, First School Leaving Certificate</option>
+                <option value="Diploma, NCE, OND">Diploma, NCE, OND</option>
+                <option value="B.Edu, BSc. B.Tech, B.A., HND, LLB">B.Edu, BSc. B.Tech, B.A., HND, LLB</option>
+                <option value="PGD">PGD</option>
+                <option value="MSc., MBA, LLM">MSc., MBA, LLM</option>
+                <option value="PHD">PHD</option>
+              </select>
+            </div>
+
             <button onClick={clearFilters}>Clear filters</button>
           </div>
         </div>
@@ -242,7 +262,7 @@ function App() {
 
 
       <div className='user-list'>
-        {displayedData?.slice(0, 20).map((person, index) => (
+        {displayedData.map((person, index) => (
           <div key={index} onClick={() => handleCardClick(person)}>
             <UserCard userData={person} />
           </div>

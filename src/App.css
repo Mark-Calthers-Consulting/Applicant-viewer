@@ -26,6 +26,7 @@ hr {
 
 .filters {
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
     align-items: flex-start;
     gap: 2rem;
@@ -33,8 +34,9 @@ hr {
 
 .search-container {
     position: relative;
+    width: 100%;
     flex: 1;
-    max-width: 500px;
+    /* max-width: 500px; */
 }
 
 .header h1 {
